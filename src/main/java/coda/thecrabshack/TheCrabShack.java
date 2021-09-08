@@ -1,20 +1,28 @@
 package coda.thecrabshack;
 
 import coda.thecrabshack.client.ClientEvents;
+import coda.thecrabshack.common.entities.ChocolateChipStarfishEntity;
 import coda.thecrabshack.common.entities.RubberDuckyIsopodEntity;
+import coda.thecrabshack.common.entities.YetiCrabEntity;
 import coda.thecrabshack.common.init.TCSEntities;
 import coda.thecrabshack.common.init.TCSItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -53,10 +61,14 @@ public class TheCrabShack {
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(TCSEntities.RUBBER_DUCKY_ISOPOD.get(), RubberDuckyIsopodEntity.createAttributes().build());
+        event.put(TCSEntities.YETI_CRAB.get(), YetiCrabEntity.createAttributes().build());
+        event.put(TCSEntities.CHOCOLATE_CHIP_STARFISH.get(), ChocolateChipStarfishEntity.createAttributes().build());
     }
 
     private void registerCommon(FMLCommonSetupEvent event) {
         EntitySpawnPlacementRegistry.register(TCSEntities.RUBBER_DUCKY_ISOPOD.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RubberDuckyIsopodEntity::checkIsopodSpawnRules);
+        EntitySpawnPlacementRegistry.register(TCSEntities.YETI_CRAB.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChocolateChipStarfishEntity::checkStarfishSpawnRules);
+        EntitySpawnPlacementRegistry.register(TCSEntities.CHOCOLATE_CHIP_STARFISH.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChocolateChipStarfishEntity::checkStarfishSpawnRules);
     }
 
     private void onBiomeLoading(BiomeLoadingEvent event) {
@@ -65,8 +77,17 @@ public class TheCrabShack {
         }
     }
 
-    // TODO: delete this
+    // TODO: fix this
     private void onLogStripped(BlockEvent.BlockToolInteractEvent event) {
+        ToolType type = event.getToolType();
+        PlayerEntity player = event.getPlayer();
+
+        if (type == ToolType.AXE) {
+            ItemEntity item = EntityType.ITEM.create(player.getCommandSenderWorld());
+            item.setItem(new ItemStack(TCSItems.BARK.get()));
+            item.moveTo(player.getX(), player.getY(), player.getZ());
+            player.level.addFreshEntity(item);
+        }
     }
 
     private void registerClient(FMLClientSetupEvent event) {

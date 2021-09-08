@@ -5,5 +5,6 @@ license="All rights reserved"
 modId="thecrabshack" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="The Crab Shack" #mandatory
-credits="Coda" #optional
+credits="Graustreif2004, Ninni" #optional
+authors="Coda" #optional
 description='''This mod adds all sorts of crustaceans!'''

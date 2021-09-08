@@ -1,7 +1,9 @@
 package coda.thecrabshack.client;
 
 import coda.thecrabshack.TheCrabShack;
+import coda.thecrabshack.client.renderer.ChocolateChipStarfishRenderer;
 import coda.thecrabshack.client.renderer.RubberDuckyIsopodRenderer;
+import coda.thecrabshack.client.renderer.YetiCrabRenderer;
 import coda.thecrabshack.common.items.TCSSpawnEggItem;
 import coda.thecrabshack.common.init.TCSEntities;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -18,6 +20,8 @@ public class ClientEvents {
 
     public static void clientSetup() {
         RenderingRegistry.registerEntityRenderingHandler(TCSEntities.RUBBER_DUCKY_ISOPOD.get(), RubberDuckyIsopodRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(TCSEntities.YETI_CRAB.get(), YetiCrabRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(TCSEntities.CHOCOLATE_CHIP_STARFISH.get(), ChocolateChipStarfishRenderer::new);
     }
 
     @SubscribeEvent
